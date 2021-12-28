@@ -70,7 +70,7 @@ def main():
 
     process_map(
         compress,
-        (file.path for file in files),
+        [file.path for file in files],
         max_workers=4
     )
 
