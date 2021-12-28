@@ -13,7 +13,7 @@ def compress(path):
     name = os.path.basename(path)
     download_name = name.replace(".pdf", "-compressed.pdf")
 
-    if os.path.exists(f'output/{download_name}'):
+    if os.path.exists(f'output/{name}'):
         return
 
     service = Service(ChromeDriverManager().install())
