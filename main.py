@@ -5,7 +5,6 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
-import time
 from tqdm.contrib.concurrent import process_map
 from webdriver_manager.chrome import ChromeDriverManager
 
@@ -48,8 +47,6 @@ def compress(path):
         WebDriverWait(driver, 300).until(
             lambda _: os.path.exists(f'output/{download_name}')
         )
-
-        time.sleep(1)
 
     # rename file
     os.rename(
