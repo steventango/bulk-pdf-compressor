@@ -10,6 +10,12 @@ from webdriver_manager.chrome import ChromeDriverManager
 
 
 def compress(path):
+    name = os.path.basename(path)
+    download_name = name.replace(".pdf", "-compressed.pdf")
+
+    if os.path.exists(f'output/{download_name}'):
+        return
+
     service = Service(ChromeDriverManager().install())
     chrome_options = webdriver.ChromeOptions()
     output_path = f'{Path("output").absolute().__str__()}{os.sep}'
@@ -21,9 +27,6 @@ def compress(path):
         }
     }
     chrome_options.add_experimental_option('prefs', prefs)
-
-    name = os.path.basename(path)
-    download_name = name.replace(".pdf", "-compressed.pdf")
 
     with webdriver.Chrome(service=service, options=chrome_options) as driver:
         # upload file
