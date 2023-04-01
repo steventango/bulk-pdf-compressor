@@ -1,3 +1,4 @@
+import argparse
 import os
 from pathlib import Path
 from selenium import webdriver
@@ -9,7 +10,8 @@ from tqdm.contrib.concurrent import process_map
 from webdriver_manager.chrome import ChromeDriverManager
 
 
-def compress(path):
+def compress(args):
+    path, args = args
     name = os.path.basename(path)
     download_name = name.replace(".pdf", "-compressed.pdf")
 
@@ -53,14 +55,25 @@ def compress(path):
             lambda _: os.path.exists(f'output/{download_name}')
         )
 
-    # rename file
     os.rename(
         f'output/{download_name}',
         f'output/{name}'
     )
 
+    if args.remove:
+        os.remove(path)
+
 
 def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--remove",
+        action="store_true",
+        help="Remove input files after compression"
+    )
+
+    args = parser.parse_args()
+
     if not os.path.exists("input"):
         os.makedirs("input")
 
@@ -72,7 +85,7 @@ def main():
 
     process_map(
         compress,
-        [file.path for file in files],
+        [(file.path, args) for file in files],
         max_workers=4
     )
 
