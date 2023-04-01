@@ -29,20 +29,22 @@ def compress(path):
     chrome_options.add_experimental_option('prefs', prefs)
 
     with webdriver.Chrome(service=service, options=chrome_options) as driver:
-        # upload file
         driver.get("https://www.adobe.com/ca/acrobat/online/compress-pdf.html")
-        input = driver.find_element(By.CSS_SELECTOR, 'input[type="file"]')
+
+        # upload file
+        selector = (By.CSS_SELECTOR, 'input[type="file"]')
+        input = driver.find_element(*selector)
         input.send_keys(path)
 
         # click convert button
-        selector = (By.CSS_SELECTOR, 'button[data-test-id="convert"]')
-        WebDriverWait(driver, 300).until(EC.element_to_be_clickable(selector))
+        selector = (By.CSS_SELECTOR, 'button[data-test-id="ls-footer-primary-compress-button"]')
+        WebDriverWait(driver, 30).until(EC.element_to_be_clickable(selector))
         button = driver.find_element(*selector)
         driver.execute_script("arguments[0].click();", button)
 
         # click download button
         selector = (By.CSS_SELECTOR, 'button[data-test-id="download"]')
-        WebDriverWait(driver, 300).until(EC.element_to_be_clickable(selector))
+        WebDriverWait(driver, 30).until(EC.element_to_be_clickable(selector))
         button = driver.find_element(*selector)
         driver.execute_script("arguments[0].click();", button)
 
