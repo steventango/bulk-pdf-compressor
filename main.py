@@ -35,6 +35,7 @@ def compress(args):
 
         # upload file
         selector = (By.CSS_SELECTOR, 'input[type="file"]')
+        WebDriverWait(driver, 30).until(EC.presence_of_element_located(selector))
         input = driver.find_element(*selector)
         input.send_keys(path)
 
