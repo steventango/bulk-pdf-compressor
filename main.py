@@ -6,7 +6,7 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
-from tqdm.contrib.concurrent import process_map
+from tqdm.contrib.concurrent import thread_map
 from webdriver_manager.chrome import ChromeDriverManager
 
 
@@ -72,6 +72,12 @@ def main():
         action="store_true",
         help="Remove input files after compression"
     )
+    parser.add_argument(
+        "--max-workers",
+        type=int,
+        default=8,
+        help="Number of workers to use"
+    )
 
     args = parser.parse_args()
 
@@ -84,10 +90,10 @@ def main():
     files = [entry for entry in os.scandir(
         Path("input").absolute()) if entry.is_file()]
 
-    process_map(
+    thread_map(
         compress,
         [(file.path, args) for file in files],
-        max_workers=4
+        max_workers=args.max_workers
     )
 
 
